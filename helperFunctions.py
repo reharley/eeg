@@ -92,7 +92,14 @@ def getFreqVals(signal, seizureTimes):
         y_vals = []
         energy = []
         seizureFreqSamples,nonSeizFreqSamples = [], []
-        if (seizureTimes[0] == 1):
+        #No seizure
+        if (seizureTimes[0] == 0):
+            x_val, energies = generateFreqSamples(signal[j])
+            energy.append(energies)
+            y_vals.append(np.full(len(x_val), -1))
+            x_vals.append(x_val)
+        #1 seizure
+        elif (seizureTimes[0] == 1):
             start, end = seizureTimes[1][0]*256, seizureTimes[2][0]*256
 
             #before seizure
@@ -112,6 +119,7 @@ def getFreqVals(signal, seizureTimes):
             energy.append(energies)
             y_vals.append(np.full(len(x_val), -1))
             x_vals.append(x_val)
+        #More than 1 seizure
         else:
             prevEnd = seizureTimes[2][0]
             for k in range(seizureTimes[0]):
